@@ -1,4 +1,50 @@
+introduction='''
+    ### **Introduction**
+    The essence of this exercise aims to provide insight on the practically of the United State of America (USA) being able to produce it's imports products and services internal thereby improving the gross domestic product (GDP) of the USA"
+
+    ### **Objectives**
+    
+    1.   How many productive hours will it take the USA to produce its imports internally.
+    2.   What is the percentage increase in the hours worked if the imports are produced internally.
+    3.   What is the implication of this on the labour force in the USA
+
+    ### **Prerequisite**
+
+    To follow along, you should have a basic understanding of Python, data analysis libraries like Pandas, numpy etc and knowledge of Scikit learn for Marching Learning. 
+
+    ### **Data Source**
+    Here is a list of data used to achieve the objective of this study
+
+    1.   [Trade Data](https://comtradeplus.un.org/)
+    2.   [GDP at constant 2015](https://databank.worldbank.org/source/world-development-indicators#)
+    3.   [GDP per Capita at constant 2015](https://databank.worldbank.org/source/world-development-indicators#)
+    4.   [Population](https://rshiny.ilo.org/dataexplorer22/?lang=en&id=HOW_UEMP_SEX_NB_A)
+    5.   [Labor Force Data](https://rshiny.ilo.org/dataexplorer22/?lang=en&id=HOW_UEMP_SEX_NB_A)
+    6.   [Export value index (2015 = 100)](https://data.worldbank.org/indicator/TX.VAL.MRCH.XD.WD)
+
+    ### **Data Description**
+
+    **GDP data:** This data records the monetary and market value of all finished good and services produce within a country at a particular point in time.
+
+    **GDP per capita Data:** This data is determine by the amount generate per household within an economy. This is gotten by dividing the GDP by the total population within an economy. It will be used to train the dataset to determine or predict the GDP per hour for countries the GDPper hour can not be determined for.
+
+    **Workforce Population:** This data source is used to determining the GDP per hour as it is assumed that the contributor to the GDP is labor force and not the total population.
+
+    **Average Work Hours:** This is the second part needed to determine the GDP per hours has we need to know what the average yearly work hours is in all countries.
+
+    **Trade Data:** This exercise leverages the United Nations Comtrade Database and OECD database to explore import data for the United States.
+
+    **Products data:** The United Nations Comtrade Database is one of the world’s largest and most comprehensive sources of international trade data, maintained by the United Nations Statistics Division (UNSD). It provides detailed information on trade flows between countries, covering thousands of products and services traded worldwide.
+
+    **Services data:** Trade in services records the value of services exchanged between residents and non-residents of an economy, including services provided through foreign affiliates established abroad. - [link](https://www.oecd.org/en/data/indicators/trade-in-services).
+
+    **Export value index (2015 = 100):** The Export Value Index (EVI) is an economic indicator that measures changes in the value of a country’s exports over time, with 2015 set as the base year (index = 100). EVI captures both price changes (e.g., inflation or price changes of commodities) and changes in the volume of exported goods, providing a broad measure of export trends.
+    [link](https://databank.worldbank.org/source/world-development-indicators)
+'''
+
 objective = '''
+    ### **Objectives**
+
     1.   How many productive hours will it take the USA to produce its imports internally.
     2.   What is the percentage increase in the hours worked if the imports are produced internally.
     3.   What is the implication of this on the labour force in the USA
@@ -6,35 +52,38 @@ objective = '''
 data_sources='''
     Here is a list of data used to achieve the objective of this study
 
-    1.   Trade Data - Both goods and services - https://comtradeplus.un.org/
-    2.   GDP at constant 2015 - https://databank.worldbank.org/source/world-development-indicators#
-    3.   GDP per Capita at constant 2015 - https://databank.worldbank.org/source/world-development-indicators#
-    4.   Population - https://rshiny.ilo.org/dataexplorer22/?lang=en&id=HOW_UEMP_SEX_NB_A
-    5.   Labor Force Data - https://rshiny.ilo.org/dataexplorer22/?lang=en&id=HOW_UEMP_SEX_NB_A
-    6.   Export value index (2015 = 100) - https://data.worldbank.org/indicator/TX.VAL.MRCH.XD.WD
+    1.   [Trade Data](https://comtradeplus.un.org/) - Both goods and services
+    2.   [GDP at constant 2015](https://databank.worldbank.org/source/world-development-indicators#)
+    3.   [GDP per Capita at constant 2015](https://databank.worldbank.org/source/world-development-indicators#)
+    4.   [Population](https://rshiny.ilo.org/dataexplorer22/?lang=en&id=HOW_UEMP_SEX_NB_A)
+    5.   [Labor Force Data](https://rshiny.ilo.org/dataexplorer22/?lang=en&id=HOW_UEMP_SEX_NB_A)
+    6.   [Export value index (2015 = 100)](https://data.worldbank.org/indicator/TX.VAL.MRCH.XD.WD)
 
 '''
 
 data_description= '''
-    GDP data: This data records the monetary and market value of all finished good and services produce within a country at a particular point in time.
+    **GDP data:** This data records the monetary and market value of all finished good and services produce within a country at a particular point in time.
 
-    GDP per capita Data: This data is determine by the amount generate per household within an economy. This is gotten by dividing the GDP by the total population within an economy. It will be used to train the dataset to determine or predict the GDP per hour for countries the GDPper hour can not be determined for.
+    **GDP per capita Data:** This data is determine by the amount generate per household within an economy. This is gotten by dividing the GDP by the total population within an economy. It will be used to train the dataset to determine or predict the GDP per hour for countries the GDPper hour can not be determined for.
 
-    Workforce Population: This data source is used to determining the GDP per hour as it is assumed that the contributor to the GDP is labor force and not the total population.
+    **Workforce Population:** This data source is used to determining the GDP per hour as it is assumed that the contributor to the GDP is labor force and not the total population.
 
-    Average Work Hours: This is the second part needed to determine the GDP per hours has we need to know what the average yearly work hours is in all countries.
+    **Average Work Hours:** This is the second part needed to determine the GDP per hours has we need to know what the average yearly work hours is in all countries.
 
-    Trade Data: This exercise leverages the United Nations Comtrade Database and OECD database to explore import data for the United States.
+    **Trade Data:** This exercise leverages the United Nations Comtrade Database and OECD database to explore import data for the United States.
 
-    Products data: The United Nations Comtrade Database is one of the world’s largest and most comprehensive sources of international trade data, maintained by the United Nations Statistics Division (UNSD). It provides detailed information on trade flows between countries, covering thousands of products and services traded worldwide. - https://comtradeplus.un.org/
+    **Products data:** The United Nations Comtrade Database is one of the world’s largest and most comprehensive sources of international trade data, maintained by the United Nations Statistics Division (UNSD). It provides detailed information on trade flows between countries, covering thousands of products and services traded worldwide.
 
-    Services data: Trade in services records the value of services exchanged between residents and non-residents of an economy, including services provided through foreign affiliates established abroad. - https://www.oecd.org/en/data/indicators/trade-in-services.
+    **Services data:** Trade in services records the value of services exchanged between residents and non-residents of an economy, including services provided through foreign affiliates established abroad. - [link](https://www.oecd.org/en/data/indicators/trade-in-services).
 
-    Export value index (2015 = 100): The Export Value Index (EVI) is an economic indicator that measures changes in the value of a country’s exports over time, with 2015 set as the base year (index = 100). EVI captures both price changes (e.g., inflation or price changes of commodities) and changes in the volume of exported goods, providing a broad measure of export trends.
-    https://databank.worldbank.org/source/world-development-indicators
+    **Export value index (2015 = 100):** The Export Value Index (EVI) is an economic indicator that measures changes in the value of a country’s exports over time, with 2015 set as the base year (index = 100). EVI captures both price changes (e.g., inflation or price changes of commodities) and changes in the volume of exported goods, providing a broad measure of export trends.
+    [link](https://databank.worldbank.org/source/world-development-indicators)
 
 '''
 steps = '''
+
+    ### **Procedure:**
+
     1. Extract the data from the data sources
     2. Determine the GDP per hour:
 
@@ -77,12 +126,12 @@ def new_labor_force_country_filt(df, country_iso3 = None):
         new_labor_force = round(263973465 * (1 + (hours_increase_percentage / 100)),2)
 
         dic = {
-            'partnerDesc': partnerDesc,
-            'total_hours_needed_to_produce_in_USA': product_df,
-            'total_hours_worked_US': total_hours_worked_US,
-            'hours_increase_percentage': hours_increase_percentage,
-            'US_working_population': 263973465,
-            'new_labor_force': new_labor_force
+            'Country Name': partnerDesc,
+            'Annual Hours to Produce': product_df,
+            'Annual Hours worked in the USA ': total_hours_worked_US,
+            'Percentage share of Working hours': hours_increase_percentage,
+            'USA Labor Force': 263973465,
+            'Labour Force growth': new_labor_force
         }
 
     return dic
@@ -103,11 +152,11 @@ def new_labor_force_product_filt(df, cmdCode = None):
 
         dic = {
             'Product Name': partnerDesc,
-            'total_hours_needed_to_produce_in_USA': product_df,
-            'total_hours_worked_US': total_hours_worked_US,
-            'hours_increase_percentage': hours_increase_percentage,
-            'US_working_population': 263973465,
-            'new_labor_force': new_labor_force
+            'Annual Hours to Produce': product_df,
+            'Annual Hours worked in the USA': total_hours_worked_US,
+            'Percentage share of Working hours': hours_increase_percentage,
+            'USA Labor Force': 263973465,
+            'Labour Force growth': new_labor_force
         }
 
     return dic
