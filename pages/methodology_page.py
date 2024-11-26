@@ -1,17 +1,13 @@
 import streamlit as st
 
 from functions.data_fetch_function import df_data
-from functions.methodology import steps,new_labor_force_country_filt,new_labor_force_product_filt,limitation,assumption,introduction
-from functions.filter_country_dropdown import df_data, update_country_code,update_country_name,country_name,country_code
-from functions.filter_product_dropdown import df_data, product_code,product_name, update_product_code, update_product_name
-
 
 # create tab for data set and visuals
 methodology_tab, prcedure_tab, data_tab ,limitation_tab = st.tabs(['Methodology',"Procedure", 'Data','Limitations'])
 
 with methodology_tab:
         # Header
-        st.header("The Feasibility of the USA Producing Its Imports Internally")
+        st.header("Could the US Produce Its Imports Internally?")
 
         # Introduction
         st.subheader("Introduction")
