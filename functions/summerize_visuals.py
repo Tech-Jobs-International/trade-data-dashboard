@@ -120,7 +120,13 @@ def country_map_vis(df_data):
     # vis_data_hour_asc = vis_date.sort_values(by='total_hours_needed_to_produce_in_USA', ascending=False)
 
     # Create a custom blue-to-white color scale
-    blue_to_white_scale = [(0, "grey"), (1, "blue")]
+    blue_to_white_scale = [
+        [0, 'rgba(128, 128, 128, 0.1)'],   # grey with 10% opacity
+        [0.25, 'rgba(255, 255, 0, 0.4)'], # Yellow with 40% opacity
+        [0.5, 'rgba(0, 255, 0, 0.7)'], # Green with 70% opacity
+        [1, 'rgba(0, 0, 255, 1)'],      # Blue with full opacity
+    ]
+    # [(0, "grey"),(0.5, "green"), (1, "blue")]
 
     # Create a choropleth map using Plotly Express
     fig = px.choropleth(vis_data_value_asc, 

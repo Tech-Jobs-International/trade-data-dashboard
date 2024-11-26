@@ -1,3 +1,5 @@
+import pandas as pd
+
 introduction='''
     ### **Introduction**
     The essence of this exercise aims to provide insight on the practically of the United State of America (USA) being able to produce it's imports products and services internal thereby improving the gross domestic product (GDP) of the USA"
@@ -119,22 +121,41 @@ def new_labor_force_country_filt(df, country_iso3 = None):
     if new_df.empty:
         print(f'country_iso3 {country_iso3} does not exist')
     else:
-        total_hours_worked_US = 523670559867
+        top_exported_product = new_df[new_df['country_iso3'] == country_iso3].sort_values(by='constant_usd', ascending=False).head(1)['cmdDesc'].iloc[0]
+        top_exported_value = round(new_df[new_df['country_iso3'] == country_iso3].sort_values(by='constant_usd', ascending=False).head(1)['constant_usd'].iloc[0],2)
         product_df = round(new_df[new_df['country_iso3'] == country_iso3]['total_hours_needed_to_produce_in_USA'].sum(),2)
-        partnerDesc = new_df[new_df['country_iso3'] == country_iso3]['partnerDesc'].iloc[0]
-        hours_increase_percentage = round((product_df  / total_hours_worked_US) *100, 2)
-        new_labor_force = round(263973465 * (1 + (hours_increase_percentage / 100)),2)
+        # partnerDesc = new_df[new_df['country_iso3'] == country_iso3]['partnerDesc'].iloc[0]
 
         dic = {
-            'Country Name': partnerDesc,
-            'Annual Hours to Produce': product_df,
-            'Annual Hours worked in the USA ': total_hours_worked_US,
-            'Percentage share of Working hours': hours_increase_percentage,
-            'USA Labor Force': 263973465,
-            'Labour Force growth': new_labor_force
+            'Total annual hours to produce': "{:,}".format(product_df),
+            'Top exported product' : top_exported_product,
+            'Top exported product in $' : "{:,}".format(top_exported_value)
         }
 
-    return dic
+        return dic
+
+def new_labor_force_country_filt_USA(df, country_iso3 = None):
+    new_df = df.copy()
+
+    # search by country code
+    new_df = new_df[new_df['country_iso3'] == country_iso3]
+    if new_df.empty:
+        print(f'country_iso3 {country_iso3} does not exist')
+    else:
+        total_hours_worked_US = 523670559867
+        product_df = round(new_df[new_df['country_iso3'] == country_iso3]['total_hours_needed_to_produce_in_USA'].sum(),2)
+        # partnerDesc = "United States of America"
+        hours_increase_percentage = (product_df  / total_hours_worked_US)
+        # new_labor_force = round((263973465 * (1 + (hours_increase_percentage / 100))-263973465),2)
+
+        dic = {
+            'Annual Hours worked in the USA ':"{:,}".format(total_hours_worked_US),
+            'USA Labor Force':"{:,}".format(263973465),
+            'Percentage share of Working hours': "{:.2%}".format(hours_increase_percentage)
+            # 'Labour Force growth': "{:,}".format(new_labor_force)
+        }
+
+        return dic
 
 def new_labor_force_product_filt(df, cmdCode = None):
     new_df = df.copy()
@@ -146,21 +167,20 @@ def new_labor_force_product_filt(df, cmdCode = None):
     else:
         total_hours_worked_US = 523670559867
         product_df = round(new_df[new_df['cmdCode'] == cmdCode]['total_hours_needed_to_produce_in_USA'].sum(),2)
-        partnerDesc = new_df[new_df['cmdCode'] == cmdCode]['cmdDesc'].iloc[0]
-        hours_increase_percentage = round((product_df  / total_hours_worked_US) *100, 2)
-        new_labor_force = round(263973465 * (1 + (hours_increase_percentage / 100)),2)
+        hours_increase_percentage = (product_df  / total_hours_worked_US)
+        new_labor_force = round(263973465 * (1 + (hours_increase_percentage / 100))-263973465,2)
+        top_exporting_country = new_df[new_df['cmdCode'] == cmdCode].sort_values(by='constant_usd', ascending=False).head(1)['partnerDesc'].iloc[0]
+        top_exporting_value = round(new_df[new_df['cmdCode'] == cmdCode].sort_values(by='constant_usd', ascending=False).head(1)['constant_usd'].iloc[0],2)
 
         dic = {
-            'Product Name': partnerDesc,
-            'Annual Hours to Produce': product_df,
-            'Annual Hours worked in the USA': total_hours_worked_US,
-            'Percentage share of Working hours': hours_increase_percentage,
-            'USA Labor Force': 263973465,
-            'Labour Force growth': new_labor_force
+            'Total annual hours to produce': "{:,}".format(product_df),
+            'Top exporting country' : top_exporting_country,
+            'Top exporting value in $': "{:,}".format(top_exporting_value),
+            'USA Labor Force': "{:,}".format(263973465),
+            'Percentage share of Working hours': "{:.2%}".format(hours_increase_percentage)
         }
 
     return dic
-
 
 # Limitation assumption
 assumption = '''

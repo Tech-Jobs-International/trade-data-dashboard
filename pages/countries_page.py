@@ -4,8 +4,10 @@ import numpy as np
 import io
 
 from functions.summerize_data import country_summerized_data,country_summerized_filter_data
-from functions.summerize_visuals import country_map_vis,country_vis_filters,country_vis_by_value,country_vis_by_hour,country_vis_by_value_filter,country_vis_by_hour_filter
+from functions.summerize_visuals import country_map_vis,country_vis_by_value,country_vis_by_hour,country_vis_by_value_filter,country_vis_by_hour_filter
 from functions.filter_product_dropdown import df_data, product_code,product_name, update_product_code, update_product_name
+from functions.methodology import new_labor_force_country_filt,new_labor_force_country_filt_USA
+from functions.filter_country_dropdown import df_data, update_country_code,update_country_name,country_name,country_code
 
 # create tab for data set and visuals
 visual_tab, data_tab = st.tabs(['Data Visualization','Data Set' ])
@@ -23,7 +25,7 @@ dropdown_options = options  # Add "Select All" to the dropdown
 
 with data_tab:
     
-    st.subheader("Table to show US values and Hours to produce imports within the US by countries")
+    st.markdown("#### Table to show US values and Hours to produce imports within the US by countries as at 2022")
     st.download_button(
         label="Download as Excel",
         data=excel_data,
@@ -31,6 +33,32 @@ with data_tab:
         mime='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
         )
     st.dataframe(country_summerized_data(df_data), height=300)
+    st.markdown("----")
+    st.markdown("##### Effect of producing a country's exports within the USA as at 2022")
+    col1, col2 = st.columns(2)  # Adjust the column widths as needed
+    with col1:
+             selected_country = st.selectbox(
+                "Select a country name:",
+                country_name,
+                key='selected_country',
+                on_change=update_country_code
+                )
+
+    with col2:
+            selected_item = st.selectbox(
+                "Select a country code:",
+                country_code,
+                key='selected_country_code',
+                on_change=update_country_name
+                )
+    col3, col4 = st.columns(2)
+    with col3:
+       st.markdown(f"##### {selected_country} perspective")
+       st.dataframe(new_labor_force_country_filt(df_data,selected_item))
+
+    with col4:
+       st.markdown("##### USA perspective")
+       st.dataframe(new_labor_force_country_filt_USA(df_data,selected_item))
 
 
 with visual_tab:

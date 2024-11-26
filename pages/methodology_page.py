@@ -19,44 +19,6 @@ with results:
         st.subheader("Results")
         st.markdown("This data set serves as the source dataframe after pulling and merging the different data source ")
         st.dataframe(df_data)
-        st.markdown("""----""")
-        st.markdown("### **Effect of producing a country's exports within the USA**")
-        col1, col2 = st.columns(2)  # Adjust the column widths as needed
-        with col1:
-             st.selectbox(
-                "Select a country name:",
-                country_name,
-                key='selected_country',
-                on_change=update_country_code
-                )
-
-        with col2:
-            selected_item = st.selectbox(
-                "Select a country code:",
-                country_code,
-                key='selected_country_code',
-                on_change=update_country_name
-                )
-        
-        st.dataframe(new_labor_force_country_filt(df_data,selected_item))
-
-        col5, col6 = st.columns(2) # dropdown for products
-        with col5:
-             st.selectbox(
-                "Select a product name:",
-                product_name,
-                key='selected_product',
-                on_change=update_product_code
-                )
-
-        with col6:
-            selected_item = st.selectbox(
-                "Select a product code:",
-                product_code,
-                key='selected_code',
-                on_change=update_product_name
-                )
-        st.dataframe(new_labor_force_product_filt(df_data,selected_item))
 
 with limitation_tab:
         st.subheader("Limitations")
