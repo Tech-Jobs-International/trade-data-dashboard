@@ -54,12 +54,12 @@ objective = '''
 data_sources='''
     Here is a list of data used to achieve the objective of this study
 
-    1.   [Trade Data](https://comtradeplus.un.org/) - Both goods and services
-    2.   [GDP at constant 2015](https://databank.worldbank.org/source/world-development-indicators#)
-    3.   [GDP per Capita at constant 2015](https://databank.worldbank.org/source/world-development-indicators#)
+    1.   [Trade Data as at 2022](https://comtradeplus.un.org/) - Both goods and services
+    2.   [GDP as at 2022 at constant 2015](https://databank.worldbank.org/source/world-development-indicators#)
+    3.   [GDP as at 2022 per Capita at constant 2015](https://databank.worldbank.org/source/world-development-indicators#)
     4.   [Population](https://rshiny.ilo.org/dataexplorer22/?lang=en&id=HOW_UEMP_SEX_NB_A)
-    5.   [Labor Force Data](https://rshiny.ilo.org/dataexplorer22/?lang=en&id=HOW_UEMP_SEX_NB_A)
-    6.   [Export value index (2015 = 100)](https://data.worldbank.org/indicator/TX.VAL.MRCH.XD.WD)
+    5.   [Labor Force Data as at 2022](https://rshiny.ilo.org/dataexplorer22/?lang=en&id=HOW_UEMP_SEX_NB_A)
+    6.   [Export value index as at 2022 (2015 = 100)](https://data.worldbank.org/indicator/TX.VAL.MRCH.XD.WD)
 
 '''
 
