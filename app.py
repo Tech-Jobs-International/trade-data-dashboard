@@ -2,7 +2,7 @@ import streamlit as st
 from  functions.initiate_session_state_dict import initialize_session_state_1
 
 st.set_page_config(
-    layout="wide",
+    #layout="wide",
     page_title="National Accounting: Effects of the US to produce goods and services imported locally",
     page_icon="assets/images/logo_1.png",
     )
