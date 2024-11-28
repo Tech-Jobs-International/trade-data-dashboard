@@ -1,115 +1,128 @@
 import streamlit as st
 import pandas as pd
-import numpy as np
 import io
 
-from functions.summerize_data import country_summerized_data,country_summerized_filter_data
-from functions.summerize_visuals import country_map_vis,country_vis_by_value,country_vis_by_hour,country_vis_by_value_filter,country_vis_by_hour_filter
-from functions.filter_product_dropdown import df_data, product_code,product_name, update_product_code, update_product_name
-from functions.methodology import new_labor_force_country_filt,new_labor_force_country_filt_USA
-from functions.filter_country_dropdown import df_data, update_country_code,update_country_name,country_name,country_code
+from functions.data_fetch_function import df_data
+from functions.summerize_data import (
+    country_summerized_data,
+    country_summerized_filter_data
+)
+from functions.summerize_visuals import (
+    country_map_vis,
+    country_vis_by_value,
+    country_vis_by_hour
+)
+from functions.filter_product_dropdown import (
+    product_code,
+    product_name,
+    update_product_code,
+    update_product_name
+)
+from functions.methodology import (
+    new_labor_force_country_filt,
+    new_labor_force_country_filt_USA
+)
+from functions.filter_country_dropdown import (
+    update_country_code,
+    update_country_name,
+    country_name,
+    country_code
+)
+
+# Cache results
+@st.cache_data
+def get_country_summarized_data():
+    return country_summerized_data(df_data)
+
+@st.cache_data
+def export_to_excel(dataframe):
+    excel_buffer = io.BytesIO()
+    with pd.ExcelWriter(excel_buffer, engine='xlsxwriter') as writer:
+        dataframe.to_excel(writer, index=False, sheet_name='Sheet1')
+    return excel_buffer.getvalue()
+
+# Prepare data
+country_data = get_country_summarized_data()
+excel_data = export_to_excel(country_data)
+
+# Define dropdown options
+dropdown_options = list(range(5, 85, 5))
 
 # create tab for data set and visuals
 visual_tab, data_tab = st.tabs(['Data Visualization','Data Set' ])
 
-# Export to Excel
-excel_buffer = io.BytesIO()
-with pd.ExcelWriter(excel_buffer, engine='xlsxwriter') as writer:
-    country_summerized_data(df_data).to_excel(writer, index=False, sheet_name='Sheet1')
-excel_data = excel_buffer.getvalue()
-
-# Define dropdown options for Multiselect
-options = [5,6,7,8,9,10,15,20,25,30,35,40,45,50,55,60,65,70,75,80]  # Steps of 5
-dropdown_options = options  # Add "Select All" to the dropdown
-
-
 with data_tab:
-    
     st.markdown("#### Table to show US values and Hours to produce imports within the US by countries as at 2022")
     st.download_button(
         label="Download as Excel",
         data=excel_data,
         file_name='country_summerized.xlsx',
         mime='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-        )
-    st.dataframe(country_summerized_data(df_data), height=300)
+    )
+    st.dataframe(country_data, height=300)
     st.markdown("----")
     st.markdown("##### Effect of producing a country's exports within the USA as at 2022")
-    col1, col2 = st.columns(2)  # Adjust the column widths as needed
-    with col1:
-             selected_country = st.selectbox(
-                "Select a country name:",
-                country_name,
-                key='selected_country',
-                on_change=update_country_code
-                )
 
-    with col2:
-            selected_item = st.selectbox(
-                "Select a country code:",
-                country_code,
-                key='selected_country_code',
-                on_change=update_country_name
-                )
+    col1, col2 = st.columns(2)
+    selected_country = col1.selectbox(
+        "Select a country name:",
+        country_name,
+        key='selected_country',
+        on_change=update_country_code
+    )
+    selected_item = col2.selectbox(
+        "Select a country code:",
+        country_code,
+        key='selected_country_code',
+        on_change=update_country_name
+    )
+
     col3, col4 = st.columns(2)
-    with col3:
-       st.markdown(f"##### {selected_country} perspective")
-       st.dataframe(new_labor_force_country_filt(df_data,selected_item))
+    col3.markdown(f"##### {selected_country} perspective")
+    col3.dataframe(new_labor_force_country_filt(df_data, selected_item))
 
-    with col4:
-       st.markdown("##### USA perspective")
-       st.dataframe(new_labor_force_country_filt_USA(df_data,selected_item))
+    col4.markdown("##### USA perspective")
+    col4.dataframe(new_labor_force_country_filt_USA(df_data, selected_item))
 
 
 with visual_tab:
-    with st.container():
-        st.markdown('### Exploratory Visuals')
-        st.markdown("----")
-        st.markdown("#### Map distribution of countries exporting to the USA as at 2022")
-        st.plotly_chart(country_map_vis(country_summerized_data(df_data)))
-        st.markdown("----")
-        selected_value = st.selectbox("Select the number of bar to display:", dropdown_options)
-        st.markdown("----")
-        st.markdown("#### Top n exporting countries to the USA as at 2022")
+    st.markdown('### Exploratory Visuals')
+    st.markdown("#### Map distribution of countries exporting to the USA as at 2022")
+    st.plotly_chart(country_map_vis(country_data))
+    st.markdown("----")
 
-        # Create two columns for the plot
-        col1, col2 = st.columns(2)  # Adjust the column widths as needed
-        with col1:
-           st.markdown(f"##### Top {selected_value} export to the USA in value as at 2022")
-           st.plotly_chart(country_vis_by_value(country_summerized_data(df_data),selected_value))
+    selected_value = st.selectbox("Select the number of bar to display:", dropdown_options)
+    st.markdown("#### Top n exporting countries to the USA as at 2022")
 
-        with col2:
-           st.markdown(f"##### Top {selected_value} export to the USA in hours as at 2022")
-           st.plotly_chart(country_vis_by_hour(country_summerized_data(df_data),selected_value)) 
+    col1, col2 = st.columns(2)
+    col1.markdown(f"##### Top {selected_value} export to the USA in value as at 2022")
+    col1.plotly_chart(country_vis_by_value(country_data, selected_value))
 
-        st.markdown("----")
+    col2.markdown(f"##### Top {selected_value} export to the USA in hours as at 2022")
+    col2.plotly_chart(country_vis_by_hour(country_data, selected_value))
 
-        # Create two columns for the filter
-        col3, col4 = st.columns(2)  # Adjust the column widths as needed
+    st.markdown("----")
 
-        with col3:
-            selected_product =  st.selectbox(
-                "Select a product name:",
-                product_name,
-                key='selected_product',
-                on_change=update_product_code
-                )
+    col3, col4 = st.columns(2)
+    selected_product = col3.selectbox(
+        "Select a product name:",
+        product_name,
+        key='selected_product',
+        on_change=update_product_code
+    )
+    selected_product_code = col4.selectbox(
+        "Select a product code:",
+        product_code,
+        key='selected_code',
+        on_change=update_product_name
+    )
 
-        with col4:
-            selected_item = st.selectbox(
-                "Select a product code:",
-                product_code,
-                key='selected_code',
-                on_change=update_product_name
-                )
+    filtered_data = country_summerized_filter_data(df_data, selected_product_code)
 
-        with st.container():
-            # Create two columns for the filter
-            col5, col6 = st.columns(2)  # Adjust the column widths as needed
-            with col5:
-                st.markdown(f"###### Top {selected_value} export of {selected_product} to the USA in value as at 2022")
-                st.plotly_chart(country_vis_by_value_filter(country_summerized_filter_data(df_data, selected_item),selected_value))
-            with col6:
-                st.markdown(f"###### Top {selected_value} export of {selected_product} to the USA in hours as at 2022")
-                st.plotly_chart(country_vis_by_hour_filter(country_summerized_filter_data(df_data, selected_item),selected_value)) 
+    col5, col6 = st.columns(2)
+    col5.markdown(f"###### Top {selected_value} export of {selected_product} to the USA in value as at 2022")
+    col5.plotly_chart(country_vis_by_value(filtered_data, selected_value))
+
+    col6.markdown(f"###### Top {selected_value} export of {selected_product} to the USA in hours as at 2022")
+    col6.plotly_chart(country_vis_by_hour(filtered_data, selected_value))
         
