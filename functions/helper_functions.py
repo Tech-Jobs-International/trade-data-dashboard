@@ -55,24 +55,31 @@ def sort_and_filter(df, sort_col, top_n=None, ascending=False):
     """Sort a dataframe by a specified column and optionally limit the results."""
     sorted_df = df.sort_values(by=sort_col, ascending=ascending)
     if top_n:
-        return sorted_df.head(top_n)
+        return sorted_df.tail(top_n)
     return sorted_df
 
 @st.cache_data
-def create_bar_chart(data, x_col, y_col, orientation='h', height=None):
+def create_bar_chart(data, x_col, y_col,x_axis_name,y_axis_name, orientation='h',height=None):
     """Create a bar chart with dynamic height."""
     num_bars = len(data)
     base_height = 200
     bar_height = 20
     fig_height = height or (base_height + (bar_height * num_bars))
 
-    fig = go.Figure(go.Bar(x=data[x_col], y=data[y_col], orientation=orientation))
-    fig.update_layout(height=fig_height, xaxis_title=x_col, yaxis_title=y_col)
+    fig = go.Figure(go.Bar(x=data[x_col], y=data[y_col], orientation=orientation,name='',text=data['partnerDesc'],hovertemplate=(
+        "Country: %{text}<br>" +  # Display country name
+        "Rank: %{customdata[0]}<br>" +  # Display rank
+        "Value: %{x:,.2f}"  # Display USD value
+    ),
+    customdata=data[['rank']]
+    ))
+    fig.update_layout(height=fig_height, xaxis_title=x_axis_name, yaxis_title=y_axis_name,hovermode="closest")
     return fig
 
 @st.cache_data
-def create_choropleth_map(df, location_col, color_col, hover_data,width=1500,height=550):
+def create_choropleth_map(df, location_col, color_col,item,width=1500,height=550):
     """Create a choropleth map with a custom color scale."""
+    value_col = df['total_hours_needed_to_produce_in_USA'] if item != 'USD-value' else color_col
     color_scale = [
         [0, 'rgba(128, 128, 128, 0.1)'], 
         [0.25, 'rgba(255, 255, 0, 0.4)'],
@@ -80,9 +87,25 @@ def create_choropleth_map(df, location_col, color_col, hover_data,width=1500,hei
         [1, 'rgba(0, 0, 255, 1)']
     ]
 
-    fig = px.choropleth(df, locations=location_col, color=color_col, hover_data=hover_data,
-                        color_continuous_scale=color_scale)
+    fig = px.choropleth(
+                            df, 
+                            locations=location_col, 
+                            color=value_col,
+                            hover_name='partnerDesc', 
+                            hover_data={
+                                'country_iso3': False,# Hide the country code from hover
+                                'partnerDesc': False},
+                            color_continuous_scale=color_scale,
+                            labels={'total_hours_needed_to_produce_in_USA': 'Hours',
+                                    'constant_usd': 'Exported Value (USD)'} # Rename the color scale
+                        )
+    
     fig.update_layout(width=width, height=height)
+
+    # Customize the hover template
+    fig.update_traces(
+         hovertemplate="<b>%{hovertext}</b><br>Value: %{z:,.2f}<extra></extra>"
+        )
     return fig
 
 @st.cache_data

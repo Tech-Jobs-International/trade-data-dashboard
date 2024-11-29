@@ -35,7 +35,7 @@ excel_data = export_to_excel(summarized_data)
 visual_tab, data_tab = st.tabs(['Data Visualization', 'Data Set'])
 
 with data_tab:
-    st.markdown("#### Table to show product export values and production hours within the USA as at 2022")
+    st.markdown("##### Table Displaying Export Product Values and Corresponding U.S. Production Hours in 2022")
     st.download_button(
         label="Download as Excel",
         data=excel_data,
@@ -44,7 +44,7 @@ with data_tab:
     )
     st.dataframe(summarized_data, height=300)
     st.markdown("---")
-    st.markdown("##### Summary performance report of products exported to the USA as at 2022")
+    st.markdown("##### Summary Performance Report of Products Exported to the USA in 2022")
 
     col1, col2 = st.columns(2)
     selected_product = col1.selectbox(
@@ -66,6 +66,6 @@ with data_tab:
 
 with visual_tab:
     st.subheader('Exploratory Visuals')
-    st.markdown("#### Top product export of each country to the USA as at 2022")
+    st.markdown("#### Top Export Product of Each Country to the USA in 2022")
     value_type = st.selectbox('Select value type:', ['USD-value', 'Hours'])
     st.plotly_chart(product_viz_treemap(df_data, value_type))

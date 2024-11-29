@@ -52,7 +52,7 @@ dropdown_options = list(range(5, 85, 5))
 visual_tab, data_tab = st.tabs(['Data Visualization','Data Set' ])
 
 with data_tab:
-    st.markdown("#### Table to show US values and Hours to produce imports within the US by countries as at 2022")
+    st.markdown("##### Table Displaying U.S. Import Values and Hours Required for Domestic Production by Country in 2022")
     st.download_button(
         label="Download as Excel",
         data=excel_data,
@@ -61,7 +61,7 @@ with data_tab:
     )
     st.dataframe(country_data, height=300)
     st.markdown("----")
-    st.markdown("##### Effect of producing a country's exports within the USA as at 2022")
+    st.markdown("##### Impact of Domestic Production of a Country's Exports in the USA in 2022")
 
     col1, col2 = st.columns(2)
     selected_country = col1.selectbox(
@@ -87,18 +87,19 @@ with data_tab:
 
 with visual_tab:
     st.markdown('### Exploratory Visuals')
-    st.markdown("#### Map distribution of countries exporting to the USA as at 2022")
-    st.plotly_chart(country_map_vis(country_data))
+    st.markdown("##### Map showing the distribution of countries exporting to the USA in 2022")
+    value_type = st.selectbox('Select value type:', ['USD-value', 'Hours'])
+    st.plotly_chart(country_map_vis(country_data,value_type))
     st.markdown("----")
 
     selected_value = st.selectbox("Select the number of bar to display:", dropdown_options)
-    st.markdown("#### Top n exporting countries to the USA as at 2022")
+    st.markdown("#### Top N Exporting Countries to the USA in 2022")
 
     col1, col2 = st.columns(2)
-    col1.markdown(f"##### Top {selected_value} export to the USA in value as at 2022")
+    col1.markdown(f"##### Top {selected_value} Export to the USA by value in 2022")
     col1.plotly_chart(country_vis_by_value(country_data, selected_value))
 
-    col2.markdown(f"##### Top {selected_value} export to the USA in hours as at 2022")
+    col2.markdown(f"##### Top {selected_value} Export to the USA by hours in 2022")
     col2.plotly_chart(country_vis_by_hour(country_data, selected_value))
 
     st.markdown("----")
@@ -120,9 +121,9 @@ with visual_tab:
     filtered_data = country_summerized_filter_data(df_data, selected_product_code)
 
     col5, col6 = st.columns(2)
-    col5.markdown(f"###### Top {selected_value} export of {selected_product} to the USA in value as at 2022")
+    col5.markdown(f"###### Top {selected_value} Export of {selected_product} to the USA by value in 2022")
     col5.plotly_chart(country_vis_by_value(filtered_data, selected_value))
 
-    col6.markdown(f"###### Top {selected_value} export of {selected_product} to the USA in hours as at 2022")
+    col6.markdown(f"###### Top {selected_value} Export of {selected_product} to the USA by hours in 2022")
     col6.plotly_chart(country_vis_by_hour(filtered_data, selected_value))
         
