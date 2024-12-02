@@ -96,11 +96,15 @@ def create_choropleth_map(df, location_col, color_col,item,width=1500,height=550
                                 'country_iso3': False,# Hide the country code from hover
                                 'partnerDesc': False},
                             color_continuous_scale=color_scale,
+                            basemap_visible=True,
                             labels={'total_hours_needed_to_produce_in_USA': 'Hours',
                                     'constant_usd': 'Exported Value (USD)'} # Rename the color scale
                         )
     
-    fig.update_layout(width=width, height=height)
+    fig.update_layout(
+        width=width,
+        height=height,
+        )
 
     # Customize the hover template
     fig.update_traces(

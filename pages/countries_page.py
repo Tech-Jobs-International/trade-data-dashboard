@@ -90,13 +90,16 @@ with visual_tab:
     st.markdown("##### Map showing the distribution of countries exporting to the USA in 2022")
     value_type = st.selectbox('Select value type:', ['USD-value', 'Hours'])
     st.plotly_chart(country_map_vis(country_data,value_type))
-    st.markdown("----")
-
-    selected_value = st.selectbox("Select the number of bar to display:", dropdown_options)
-    st.markdown("#### Top N Exporting Countries to the USA in 2022")
+    
+    col1, col2 = st.columns([1.5, 1])
+    selected_value = col2.selectbox("Select the number of bars to display:", dropdown_options)
+    col1.markdown(f"### Top {selected_value} Exporting Countries to the USA in 2022")
+    st.divider()
+    #st.markdown("#### Top N Exporting Countries to the USA in 2022")
 
     col1, col2 = st.columns(2)
     col1.markdown(f"##### Top {selected_value} Export to the USA by value in 2022")
+    
     col1.plotly_chart(country_vis_by_value(country_data, selected_value))
 
     col2.markdown(f"##### Top {selected_value} Export to the USA by hours in 2022")
