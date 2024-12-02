@@ -1,13 +1,10 @@
-import streamlit as st
-import pandas as pd
+from functions.helper_functions import load_data, get_unique_values
 
-# call data
-df_data = pd.read_excel('data/marged_product_breakdown.xlsx', sheet_name='gdp_per_hour')
+# load Data
+df_data = load_data('data/marged_product_breakdown.xlsx', sheet_name='gdp_per_hour')
 
-# Get unique values of product_name and code
-product_name = df_data['cmdDesc'].unique()
-product_code = df_data['cmdCode'].unique()
-
-# Get unique values of country name and code
-country_name = df_data['partnerDesc'].unique()
-country_code = df_data['country_iso3'].unique()
+# Get unique values
+product_name = get_unique_values(df_data, 'cmdDesc')
+product_code = get_unique_values(df_data, 'cmdCode')
+country_name = get_unique_values(df_data, 'partnerDesc')
+country_code = get_unique_values(df_data, 'country_iso3')

@@ -1,37 +1,36 @@
 import streamlit as st
 import pandas as pd
 
+from functions.helper_functions import summarize_data, filter_and_summarize
+
+# Define columns to group by and sum for each data type
+country_group_by_cols = ['partnerDesc', 'country_iso3', 'GDP_per_hour']
+country_sum_cols = ['constant_usd', 'total_hours_needed_to_produce_in_USA']
+
+product_group_by_cols = ['cmdCode', 'cmdDesc']
+product_sum_cols = ['constant_usd', 'total_hours_needed_to_produce_in_USA']
+
 @st.cache_data
 def country_summerized_data(df_data_country):
-    countries_data = df_data_country.copy()
-    filterd_countries = countries_data.loc[:,['partnerDesc','country_iso3','constant_usd', 'GDP_per_hour','total_hours_needed_to_produce_in_USA']]
-    new_df_data = filterd_countries.groupby(['partnerDesc', 'country_iso3', 'GDP_per_hour']).sum().reset_index()
+    new_df_data = summarize_data(df_data_country, country_group_by_cols, country_sum_cols)
 
     return new_df_data
 
 @st.cache_data
 def country_summerized_filter_data(df_data_country, selected_item):
-    item = selected_item
-    countries_data = df_data_country[df_data_country['cmdCode'] == item].copy()
-    filterd_countries = countries_data.loc[:,['partnerDesc','country_iso3','constant_usd', 'GDP_per_hour','total_hours_needed_to_produce_in_USA']]
-    new_df_data = filterd_countries.groupby(['partnerDesc', 'country_iso3', 'GDP_per_hour']).sum().reset_index()
+    new_df_data = filter_and_summarize(df_data_country, 'cmdCode', selected_item, country_group_by_cols, country_sum_cols)
 
     return new_df_data
 
 
 @st.cache_data
 def product_summerized_data(df_data_product):
-    product_data = df_data_product.copy()
-    filterd_products = product_data.loc[:,['cmdCode','cmdDesc','constant_usd','total_hours_needed_to_produce_in_USA']]
-    new_df_data = filterd_products.groupby(['cmdCode', 'cmdDesc']).sum().reset_index()
+    new_df_data = summarize_data(df_data_product, product_group_by_cols, product_sum_cols)
 
     return new_df_data
 
 @st.cache_data
 def product_summerized_filter_data(df_data_product, selected_item):
-    item = selected_item
-    countries_data = df_data_product[df_data_product['country_iso3'] == item].copy()
-    filterd_countries = countries_data.loc[:,['cmdDesc','cmdCode','constant_usd','total_hours_needed_to_produce_in_USA']]
-    new_df_data = filterd_countries.groupby(['cmdDesc', 'cmdCode']).sum().reset_index()
+    new_df_data = filter_and_summarize(df_data_product, 'country_iso3', selected_item, product_group_by_cols, product_sum_cols)
 
     return new_df_data
